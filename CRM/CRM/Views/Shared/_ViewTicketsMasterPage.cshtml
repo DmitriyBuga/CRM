@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "_ViewTicketsMasterPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Список тикетов</title>
+    <link href="@Url.Content("~/Content/bootstrap.css")" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container marketing">
+        @Html.Action("MenuTasks", "Tasks")
+                @*
+        @Html.Partial("MenuGroup")
+                *@
+        @RenderBody()
+    </div>
+</body>
+</html>
+
+
+

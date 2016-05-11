@@ -1,0 +1,125 @@
+﻿@model CRM.Models.TicketsModel
+@{
+    ViewBag.Title = "ViewTickets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    
+</head>
+<body>
+    <div ng-controller="crmTableController">
+        <script type="text/javascript">
+            var model = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(this.Model));
+            app.value("viewModel", model);
+        </script>
+        <script type="text/ng-template" id="tickets-tree">
+            
+            <div class="btn btn-default active" id="ticket_in_tree" ng-click="selectTicketInTree(ticket.id)">
+                {{ticket.subject}}
+                {{ticket.level}}
+            </div>
+            <ul>
+                <li ng-repeat="ticket in ticket.currentTicketsChain" ng-include="'tickets-tree'" style="list-style-type:none;">
+                </li>
+            </ul>
+        </script>
+        <div class="well well-row col-md-4">
+            <ul class="nav nav-pills nav-stacked" id="task_menu">
+                <li class='task active'>
+                    <a href="" ng-click="selectTask(-1)">
+                        Все задачи
+                    </a>
+                </li>
+                <li ng-repeat="task in tasks" ng-click="selectTask(task.id)">
+                    <a href="">
+                        {{task.name}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="well well-row col-md-20" style="position:relative">
+            <div ng-repeat="ticket in tickets" class="well well-row col-md-8">
+                <b>{{ticket.subject}}</b>
+                <br />
+                <input type="button" ng-click="editTicket($event,ticket.id)" class="btn btn-danger btn-sm" value="открыть" />
+                <input type="button" ng-click="editTicket($event,ticket.id)" href="#modal_tickets" class="btn btn-default btn-sm" value="Изменить" data-toggle="modal" />
+                <input type="button" ng-click="deleteTicket(ticket.id)" class="btn btn-danger btn-sm" value="Удалить" />
+            </div>
+        </div>
+        <!--modal-photo-->
+        <div id="modal_photo" class="modal fade" tabindex="-1" data-focus-on="input:first" data-backdrop="false" style="z-index:100000;position:absolute;" data-keyboard="true">
+           <div class="modal-dialog" style="position:absolute;width:100%;z-index:100000;">
+                <div class="modal-header"style="position:absolute;width:100%;z-index:10000;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-content well">
+                    <img class="modal-content" ng-src="data:image/jpeg;base64,{{getCurrentImage()}}" id="myImg" style="margin-top:22px;"/>
+                </div>
+            </div>
+        </div>        
+        <!-- Modal -->
+
+        <div id="modal_tickets" class="modal fade" tabindex="-1" data-focus-on="input:first" data-backdrop="false" style="display: none;">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content well col-md-24">
+                    <div class="well well-row col-md-6 pre-scrollable">
+                        <ul class="nav nav-list tree">
+                            <li ng-repeat="ticket in currentTicketsChain" ng-include="'tickets-tree'"></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-18">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Ticket: {{selectedTicket.subject}}</h4>
+                        </div>
+                        <div class="modal-body col-md-24">
+                            
+                            <div class="well col-md-10">
+                                <div class="nav nav-list pre-scrollable">
+                                    <ul ng-repeat="image in selectedTicket.images">
+                                        <li class="navbar-inverse" style="list-style-type:none;">
+                                            <a class="btn btn-danger" ng-click="deleteImage(image[1])" href="#" role="button">
+                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                <span class="sr-only">delete</span>
+                                            </a>
+                                            <a href="#modal_photo" data-ng-class="{active : $first}" ng-click="openPhoto(image[0])" data-toggle="modal">
+                                                <img ng-src="data:image/jpeg;base64,{{image[0]}}" id="myImg" style="max-height:200px;min-height:200px" />
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="modal-footer">
+                                    <input onchange="angular.element(this).scope().file_load(this)"
+                                           type="file" accept="image/*" id="authUser">
+
+                                </div>
+                            </div>
+                            <div class="well well-row col-md-14">
+                                {{selectedTicket.id}}
+                                <label>Запрос</label>
+                                <br />
+                                <b>{{selectedTicket.body}}</b>
+                            </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" ng-click="answerTicket()">Ответить</button>
+                            <button type="button" class="btn btn-danger" ng-click="deleteTicket()">Удалить</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="well-row col-md-2">
+            <a href=@Url.Action("Create", "Tickets") class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
+
+        </div>
+
+    </div>
+</body>

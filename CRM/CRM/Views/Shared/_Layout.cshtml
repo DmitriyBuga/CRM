@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html ng-app="appCRM">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>@ViewBag.Title</title>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/underscore")
+
+    @Scripts.Render("~/bundles/CRMScripts")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/css")
+    <meta name="description" content="The description of my page" />
+</head>
+<body>
+    <header></header>
+    <nav class="navbar navbar-default">
+        <ul class="nav navbar-nav " id="top_menu">
+            
+            @if (Request.IsAuthenticated)
+            {
+                <li>
+                    @Html.ActionLink("Задачи", "ViewTickets", "Tickets")
+                </li>
+                <li>
+                    @Html.ActionLink("Объекты поддержки", "ViewTasks", "Task")
+                </li>
+                <li>
+                    @Html.ActionLink("Справочник контрагентов", "ViewCust", "Customers")
+                </li>
+                <li>
+                    @Html.ActionLink("Справочник районов", "Districts", "Directories")
+                </li>
+                if (@User.IsInRole("Admin"))
+                {
+                    <li>
+                        @Html.ActionLink("Пользователи", "Districts", "Directories")
+                    </li>
+                }
+            }
+
+            @Html.Partial("_LoginPartial")
+        </ul>
+    </nav>
+
+
+    @RenderBody()
+    <script>
+        var userRole = '@(User.IsInRole("User") ? "true" : "false")';
+        var adminRole = '@(User.IsInRole("Admin") ? "true" : "false")';
+        jQuery(document).ready(function () {
+           // setItemByRoles(userRole, adminRole);
+        })
+    </script>
+</body>
+
+</html>

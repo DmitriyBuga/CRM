@@ -1,0 +1,35 @@
+﻿@model IQueryable<CRM.Models.Tasks>
+@{
+    Layout = null;
+}
+<head>
+</head>
+
+<div style="float:left; width:200px;">
+    <div class="sidebar-nav">
+        <div class="well" style="width:200px; padding: 8px 0">
+            <ul class="nav nav-list">
+                <li class="@ViewBag.AllTicket">
+                    @Html.ActionLink("All tickets", "TicketList", "Staff", new { selectedGroup = -1 }, new { styles = "float:left;" })
+                </li>
+                @foreach (var task in @Model)
+                {
+                    <li><i class="icon-comment">
+                        @Html.ActionLink(
+                        @task.name,
+                        "SelectTask",
+                        "Tickets",
+                        new { task_id = @task.id },
+                        null
+                    )
+                    </i></li>
+                }
+                <li class="@ViewBag.NewTicket"><a href="/Staff/NewTickets"><i class="icon-comment"></i> New unassigned tickets</a></li>
+                <li class="@ViewBag.OpenTicket"><a href="/Staff/OpenTickets"><i class="icon-comment"></i> Open Tickets</a></li class="@ViewBag.OpenTicket">
+                <li class="@ViewBag.OnHoldTicket"><a href="/Staff/OnHoldTickets"><i class="icon-comment"></i> On hold tickets</a></a></li>
+                <li class="@ViewBag.CompletedTicket"><a href="/Staff/CompletedTickets"><i class="icon-comment"></i> Closed Tickets</a></a></li>
+                <li class="divider"></li>
+            </ul>
+        </div>
+    </div>
+</div>

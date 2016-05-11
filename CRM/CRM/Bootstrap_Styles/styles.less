@@ -1,0 +1,27 @@
+﻿@import "/less/bootstrap.less";
+@import "variables.less";
+p {
+	margin: 20px 0;
+}
+
+.form-control {
+	box-shadow: none;
+}
+
+.btn {
+	font-family: @brand-font;
+}
+body {
+	border-top: 5px solid #7e7e7e;
+	//background-image: url(../images/bg.png);
+}
+#top_menu{display:block;list-style-type:none;margin:0 7px 0 0;padding:0}
+#top_menu:after{content:'.';display:block;clear:both;visibility:hidden;height:0;font-size:0}
+#top_menu li{position:relative;float:left;margin:0 4px 0 0;padding:0 8px;background-color:rgba(255,255,255,.15);}
+#top_menu li.active,#top_menu li.current{background:#999}
+#top_menu li.active a,#top_menu li.current a{color:black}
+#modal_tickets .modal-dialog  {width:100%;}
+#task_menu li.active a{background:#999}
+#task_menu li a{color:black}
+#ticket_in_tree .btn.active .btn:active{background:#999}
+#modal_photo .modal-dialog  {width:90%;}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ed3ac6a6807b4634bb8a9dca5b558a63" Name="Diagram1">
+        <EntityTypeShape EntityType="MiniCRMModel.Customers" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Managers" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Role" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Tasks" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Tickets" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Users" Width="1.5" PointX="4.75" PointY="5.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Attachments" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Images" Width="1.5" PointX="7.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
