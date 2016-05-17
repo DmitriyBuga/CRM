@@ -118,9 +118,27 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, angul
         }
         }, function (err) { alert(err); }));
     }
+    $scope.setFirstActiveTicketButton = function (ticketId) {
+        var active = angular.element(document.querySelector('#ticket_in_tree.active'));
+        if (active.length == 0) {
+            active = angular.element(document.querySelector('#ticket_in_tree'));
+            active.addClass('active');
+        }
+    }
     $scope.selectTicketInTree = function (ticketId) {
-        angular.element(document.querySelector('#ticket_in_tree.active')).removeClass('active');
-        angular.element(event.target).addClass('active');
+        var active = angular.element(document.querySelector('#ticket_in_tree.active'));
+        if (active.length > 0)
+        {
+            active.removeClass('active');
+            active = angular.element(event.target);
+            active.addClass('active');
+        }
+        else
+        {
+            active = angular.element(document.querySelector('#ticket_in_tree'));
+            active.addClass('active');
+        }
+        
         $scope.selectedTicket = {};
         $scope.selectedTicket = $scope.getTicket(ticketId, $scope.currentTicketsChain);
         $scope.selectedTicket.images = {};

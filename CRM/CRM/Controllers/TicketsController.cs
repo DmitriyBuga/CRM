@@ -142,6 +142,7 @@ namespace CRM.Controllers
             TicketsModel ticketsModel = new TicketsModel();
             CommonData commonData = new CommonData(repository);
             ticketsModel.tasks = commonData.GetTasks();
+            ticketsModel.statuses = commonData.GetStatuses();
             ticketsModel.users = commonData.GetUsers();
             ticketsModel.managers = commonData.GetManagers();
             ticketsModel.customers = commonData.GetCustomers();

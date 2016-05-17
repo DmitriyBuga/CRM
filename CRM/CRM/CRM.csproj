@@ -989,6 +989,9 @@
     <Compile Include="Models\select_tickets_Result.cs">
       <DependentUpon>ModelCRM.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Statuses.cs">
+      <DependentUpon>ModelCRM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Tasks.cs">
       <DependentUpon>ModelCRM.tt</DependentUpon>
     </Compile>

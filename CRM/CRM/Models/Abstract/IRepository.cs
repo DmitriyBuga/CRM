@@ -11,6 +11,7 @@ namespace CRM.Models.Abstract
     public interface IRepository
     {
         MiniCRMEntities DbContext { get; }
+        IQueryable<Statuses> Statuses { get; }
         IQueryable<Users> Users { get; }
         IQueryable<Tickets> Tickets { get; }
         IQueryable<Customers> Customers { get; }

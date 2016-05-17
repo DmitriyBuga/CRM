@@ -35,6 +35,7 @@ namespace CRM.Models
         public virtual DbSet<Tasks> Tasks { get; set; }
         public virtual DbSet<Tickets> Tickets { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Statuses> Statuses { get; set; }
     
         [DbFunction("MiniCRMEntities", "select_tickets")]
         public virtual IQueryable<select_tickets_Result> select_tickets(Nullable<int> ticket_id)

@@ -15,6 +15,7 @@ namespace CRM.Models
         public List<ViewTickets> tickets { get; set; }
         public List<CommonDirJSON> users { get; set; }
         public List<CommonDirJSON> customers { get; set; }
+        public List<CommonDirJSON> statuses { get; set; }
         public List<CommonDirJSON> tasks { get; set; }
         public List<CommonDirJSON> managers { get; set; }
     }

@@ -38,6 +38,10 @@ namespace CRM.Models.Concrete
         {
             get { return dbContext.Tickets; }
         }
+        public IQueryable<Statuses> Statuses
+        {
+            get { return dbContext.Statuses; }
+        }
         public IQueryable<Customers> Customers
         {
             get { return dbContext.Customers; }

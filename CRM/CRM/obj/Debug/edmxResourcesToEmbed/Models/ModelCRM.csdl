@@ -18,6 +18,7 @@
     <EntitySet Name="Tasks" EntityType="MiniCRMModel.Tasks" />
     <EntitySet Name="Tickets" EntityType="MiniCRMModel.Tickets" />
     <EntitySet Name="Users" EntityType="MiniCRMModel.Users" />
+    <EntitySet Name="Statuses" EntityType="MiniCRMModel.Statuses" />
   </EntityContainer>
   <ComplexType Name="select_tickets_Result">
     <Property Type="Int32" Name="id" Nullable="true" />
@@ -107,5 +108,12 @@
     <Property Name="role_id" Type="Int32" Nullable="false" />
     <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Statuses">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
 </Schema>

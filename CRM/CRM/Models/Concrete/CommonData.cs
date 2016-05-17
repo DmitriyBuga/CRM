@@ -13,7 +13,13 @@ namespace CRM.Models.Concrete
         {
             repository = repo;
         }
-        
+        public List<CommonDirJSON> GetStatuses()
+        {
+            List<CommonDirJSON> statuses = new List<CommonDirJSON>();
+            foreach (Statuses reg in repository.Statuses)
+                statuses.Add(new CommonDirJSON() { id = reg.id, name = reg.name });
+            return statuses;
+        }
         public List<CommonDirJSON> GetUsers()
         {
             List<CommonDirJSON> users = new List<CommonDirJSON>();

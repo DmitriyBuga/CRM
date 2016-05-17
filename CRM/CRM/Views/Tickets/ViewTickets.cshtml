@@ -13,10 +13,10 @@
             app.value("viewModel", model);
         </script>
         <script type="text/ng-template" id="tickets-tree">
-            
-            <div class="btn btn-default active" id="ticket_in_tree" ng-click="selectTicketInTree(ticket.id)">
-                {{ticket.subject}}
-                {{ticket.level}}
+            <div class="btn btn-default" id="ticket_in_tree" ng-click="selectTicketInTree(ticket.id)" ng-init="setFirstActiveTicketButton(ticket.id)">
+                
+                    {{ticket.subject}}
+                
             </div>
             <ul>
                 <li ng-repeat="ticket in ticket.currentTicketsChain" ng-include="'tickets-tree'" style="list-style-type:none;">
@@ -72,11 +72,10 @@
                     <div class="col-md-18">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Ticket: {{selectedTicket.subject}}</h4>
+                            <b class="modal-title">Ticket: {{selectedTicket.subject}}</b>
                         </div>
                         <div class="modal-body col-md-24">
-                            
-                            <div class="well col-md-10">
+                            <div class="well col-md-10"  style="padding:5px;">
                                 <div class="nav nav-list pre-scrollable">
                                     <ul ng-repeat="image in selectedTicket.images">
                                         <li class="navbar-inverse" style="list-style-type:none;">
@@ -96,11 +95,33 @@
 
                                 </div>
                             </div>
-                            <div class="well well-row col-md-14">
-                                {{selectedTicket.id}}
-                                <label>Запрос</label>
-                                <br />
-                                <b>{{selectedTicket.body}}</b>
+                            <div class="well well-row col-md-14"  style="padding:5px;">
+                                <div class="col-md-6" style="text-align:left;margin:0 auto;">
+                                    <label>Пользователь</label>
+                                    <label>Клиент</label>
+                                    <label>Менеджер</label>
+                                    <label>Заголовок</label>
+                                    <label>Статус</label>
+                                    <label>Задача</label>
+                                    <label>Запрос</label>
+                                </div>
+                                <div class="well-row col-md-18">
+                                    <input type="text" ng-model="selectedTicket.user_id" style="width:100%;" disabled/>
+                                    <input type="text" ng-model="selectedTicket.cust_id" style="width:100%;" disabled/>
+                                    <input type="text" ng-model="selectedTicket.manager_id" style="width:100%;" disabled/>
+                                    <input type="text" ng-model="selectedTicket.subject" style="width:100%;" />
+                                    <select ng-model="selectedTicket.status_id" style="width:100%">
+                                        <option ng-repeat="status in statuses" value="task.id" ng-selected="status.id == selectedTicket.status_id">
+                                            {{status.name}}
+                                        </option>
+                                    </select>
+                                    <select ng-model="selectedTicket.department_id" style="width:100%">
+                                        <option ng-repeat="task in tasks" value="task.id" ng-selected="task.id == selectedTicket.department_id">
+                                            {{task.name}}
+                                        </option>
+                                    </select>
+                                    <textarea class="input" rows="3" ng-model="selectedTicket.body" style="width:100%;"></textarea>
+                                </div>
                             </div>
                             
                         </div>
@@ -123,3 +144,4 @@
 
     </div>
 </body>
+
