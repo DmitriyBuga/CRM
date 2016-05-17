@@ -297,16 +297,8 @@ SET IDENTITY_INSERT [dbo].[Tickets] ON
 INSERT [dbo].[Tickets] ([id], [department_id], [user_id], [status_id], [email], [subject], [body], [mail_data], [reference], [responce], [parent_id], [task_id], [manager_id], [cust_id]) VALUES (3, 1, 1, 2, N'aaa@mail.com', N'asdasasdasdasd', N'sdfasdkljfsdlj asfdkasdlasdfjl asdflasdffkajasdflj', NULL, NULL, NULL, NULL, 1, 1, 1)
 INSERT [dbo].[Tickets] ([id], [department_id], [user_id], [status_id], [email], [subject], [body], [mail_data], [reference], [responce], [parent_id], [task_id], [manager_id], [cust_id]) VALUES (5, 1, 1, 2, N'aaabbb@mail.com', N'sdffwexxbcxc', N'ew23qrerqw vxczxcvv asdfasdffads', NULL, NULL, NULL, 3, 1, 1, 1)
 INSERT [dbo].[Tickets] ([id], [department_id], [user_id], [status_id], [email], [subject], [body], [mail_data], [reference], [responce], [parent_id], [task_id], [manager_id], [cust_id]) VALUES (6, 1, 1, 2, N'aaa@mail.com', N'sdffsxcvxcvxcvxvc', N'sdfdsdfdfsdf', NULL, NULL, NULL, 5, 1, 1, 1)
-INSERT [dbo].[Tickets] ([id], [department_id], [user_id], [status_id], [email], [subject], [body], [mail_data], [reference], [responce], [parent_id], [task_id], [manager_id], [cust_id]) VALUES (7, 1, 1, 2, N'aaa@mail.com', N'sdffsxcvxcvxcvxvc', N'sdfdsdfdfsdf', NULL, NULL, NULL, 5, 1, 1, 1)
 SET IDENTITY_INSERT [dbo].[Tickets] OFF
-SET IDENTITY_INSERT [dbo].[Users] ON 
 
-INSERT [dbo].[Users] ([id], [name], [login], [password], [position], [department_id], [role_id], [firstname], [lastname]) VALUES (0, N'sa', N'sa', N'123qwe', N'', NULL, 0, NULL, NULL)
-INSERT [dbo].[Users] ([id], [name], [login], [password], [position], [department_id], [role_id], [firstname], [lastname]) VALUES (1, N'user1', N'saUser', N'123qwe', N'0', NULL, 1, NULL, NULL)
-INSERT [dbo].[Users] ([id], [name], [login], [password], [position], [department_id], [role_id], [firstname], [lastname]) VALUES (2, N'sa11', N'sa11', N'123qwe', N'', NULL, 2, NULL, NULL)
-INSERT [dbo].[Users] ([id], [name], [login], [password], [position], [department_id], [role_id], [firstname], [lastname]) VALUES (3, N'bbb', N'bbb', N'123qwe', N'', NULL, 2, NULL, NULL)
-INSERT [dbo].[Users] ([id], [name], [login], [password], [position], [department_id], [role_id], [firstname], [lastname]) VALUES (4, N'user', N'user', N'123qwe', N'', NULL, 2, NULL, NULL)
-SET IDENTITY_INSERT [dbo].[Users] OFF
 USE [master]
 GO
 ALTER DATABASE [MiniCRM] SET  READ_WRITE 
