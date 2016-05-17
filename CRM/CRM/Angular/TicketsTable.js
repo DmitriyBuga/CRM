@@ -139,6 +139,7 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, angul
     $scope.deleteTicket = function () {
         if (confirm("Вы действительно хотите удалить текущую заявку?"))
         {
+            angularService.deleteTicket($scope.selectedTicket.id);
             function arrayCloneWODeleted(arr) {
                 var i, copy;
                 if (typeof arr === 'object' && arr != null && arr.length > 0)

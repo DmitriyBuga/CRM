@@ -10,6 +10,7 @@ namespace CRM.Models.Abstract
 {
     public interface IRepository
     {
+        MiniCRMEntities DbContext { get; }
         IQueryable<Users> Users { get; }
         IQueryable<Tickets> Tickets { get; }
         IQueryable<Customers> Customers { get; }
@@ -21,5 +22,6 @@ namespace CRM.Models.Abstract
         void DeleteRecord<T>(T dbEntry);
         T CreateRecord<T>(T dbEntry);
         void UpdateRecord<T>(T dbEntry) where T : class;
+        
     }
 }

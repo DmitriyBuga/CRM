@@ -1,12 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="Хранилище MiniCRMModelContainer" CdmEntityContainer="MiniCRMEntities">
+    <FunctionImportMapping FunctionImportName="select_tickets" FunctionName="Хранилище MiniCRMModel.select_tickets">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MiniCRMModel.select_tickets_Result">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="parent_id" ColumnName="parent_id" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="delete_images" FunctionName="Хранилище MiniCRMModel.delete_images" />
+    <FunctionImportMapping FunctionImportName="delete_tickets" FunctionName="Хранилище MiniCRMModel.delete_tickets" />
+    <EntitySetMapping Name="Attachments">
+      <EntityTypeMapping TypeName="MiniCRMModel.Attachments">
+        <MappingFragment StoreEntitySet="Attachments">
+          <ScalarProperty Name="cust_id" ColumnName="cust_id" />
+          <ScalarProperty Name="task_id" ColumnName="task_id" />
+          <ScalarProperty Name="file_path" ColumnName="file_path" />
+          <ScalarProperty Name="descr" ColumnName="descr" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Customers">
       <EntityTypeMapping TypeName="MiniCRMModel.Customers">
         <MappingFragment StoreEntitySet="Customers">
           <ScalarProperty Name="adress" ColumnName="adress" />
           <ScalarProperty Name="phone" ColumnName="phone" />
           <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Images">
+      <EntityTypeMapping TypeName="MiniCRMModel.Images">
+        <MappingFragment StoreEntitySet="Images">
+          <ScalarProperty Name="ImageMimeType" ColumnName="ImageMimeType" />
+          <ScalarProperty Name="ImageData" ColumnName="ImageData" />
+          <ScalarProperty Name="ticket_id" ColumnName="ticket_id" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -69,27 +100,6 @@
           <ScalarProperty Name="password" ColumnName="password" />
           <ScalarProperty Name="login" ColumnName="login" />
           <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Attachments">
-      <EntityTypeMapping TypeName="MiniCRMModel.Attachments">
-        <MappingFragment StoreEntitySet="Attachments">
-          <ScalarProperty Name="cust_id" ColumnName="cust_id" />
-          <ScalarProperty Name="task_id" ColumnName="task_id" />
-          <ScalarProperty Name="file_path" ColumnName="file_path" />
-          <ScalarProperty Name="descr" ColumnName="descr" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Images">
-      <EntityTypeMapping TypeName="MiniCRMModel.Images">
-        <MappingFragment StoreEntitySet="Images">
-          <ScalarProperty Name="ImageMimeType" ColumnName="ImageMimeType" />
-          <ScalarProperty Name="ImageData" ColumnName="ImageData" />
-          <ScalarProperty Name="ticket_id" ColumnName="ticket_id" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>

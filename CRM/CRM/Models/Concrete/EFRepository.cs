@@ -14,8 +14,11 @@ namespace CRM.Models.Concrete
    
     public class EFRepository : IRepository
     {
-        private EFDbContext dbContext;
-        public EFRepository(EFDbContext context)
+        private MiniCRMEntities dbContext;
+        public MiniCRMEntities DbContext {
+            get { return dbContext; }
+        }
+        public EFRepository(MiniCRMEntities context)
         {
             dbContext = context;
         }
@@ -41,7 +44,7 @@ namespace CRM.Models.Concrete
         }
         public IQueryable<Role> Roles
         {
-            get { return dbContext.Roles; }
+            get { return dbContext.Role; }
         }
         public IQueryable<Images> Images
         {

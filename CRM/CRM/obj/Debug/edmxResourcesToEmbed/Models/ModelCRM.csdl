@@ -1,15 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="MiniCRMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="MiniCRMEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="select_tickets" IsComposable="true" ReturnType="Collection(MiniCRMModel.select_tickets_Result)">
+      <Parameter Name="ticket_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="delete_images">
+      <Parameter Name="ticket_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="delete_tickets">
+      <Parameter Name="ticket_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="Attachments" EntityType="MiniCRMModel.Attachments" />
     <EntitySet Name="Customers" EntityType="MiniCRMModel.Customers" />
+    <EntitySet Name="Images" EntityType="MiniCRMModel.Images" />
     <EntitySet Name="Managers" EntityType="MiniCRMModel.Managers" />
     <EntitySet Name="Role" EntityType="MiniCRMModel.Role" />
     <EntitySet Name="Tasks" EntityType="MiniCRMModel.Tasks" />
     <EntitySet Name="Tickets" EntityType="MiniCRMModel.Tickets" />
     <EntitySet Name="Users" EntityType="MiniCRMModel.Users" />
-    <EntitySet Name="Attachments" EntityType="MiniCRMModel.Attachments" />
-    <EntitySet Name="Images" EntityType="MiniCRMModel.Images" />
   </EntityContainer>
+  <ComplexType Name="select_tickets_Result">
+    <Property Type="Int32" Name="id" Nullable="true" />
+    <Property Type="Int32" Name="parent_id" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Attachments">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="descr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="file_path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="task_id" Type="Int32" Nullable="false" />
+    <Property Name="cust_id" Type="Int32" />
+  </EntityType>
   <EntityType Name="Customers">
     <Key>
       <PropertyRef Name="id" />
@@ -18,6 +41,15 @@
     <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="adress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Images">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ticket_id" Type="Int32" Nullable="false" />
+    <Property Name="ImageData" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="ImageMimeType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Managers">
     <Key>
@@ -75,24 +107,5 @@
     <Property Name="role_id" Type="Int32" Nullable="false" />
     <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <EntityType Name="Attachments">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="descr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="file_path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="task_id" Type="Int32" Nullable="false" />
-    <Property Name="cust_id" Type="Int32" />
-  </EntityType>
-  <EntityType Name="Images">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ticket_id" Type="Int32" Nullable="false" />
-    <Property Name="ImageData" Type="Binary" MaxLength="Max" FixedLength="false" />
-    <Property Name="ImageMimeType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

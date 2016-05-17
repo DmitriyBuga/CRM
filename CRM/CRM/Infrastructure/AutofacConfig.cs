@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using CRM.Models;
 using CRM.Models.Abstract;
 using CRM.Models.Concrete;
 using System;
@@ -22,7 +23,7 @@ namespace CRM.Infrastructure
 
             // регистрируем споставление типов
             builder.RegisterType<EFRepository>().As<IRepository>()
-                .WithParameter("context", new EFDbContext());
+                .WithParameter("context", new MiniCRMEntities());
 
             /*
             EmailSettings emailSettings = new EmailSettings

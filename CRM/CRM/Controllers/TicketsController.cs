@@ -87,6 +87,29 @@ namespace CRM.Controllers
             level--;
             return ticketsChain;
         }
+        private void deleteTickets(int ticketId)
+        {
+            IQueryable<Tickets> tickets = repository.Tickets.Where(x => x.parent_id == ticketId);
+            if (tickets.Count() > 0)
+            {
+                foreach (Tickets ticket in tickets)
+                {
+                    deleteTickets(ticket.id);
+                    IQueryable<Images> images = repository.Images.Where(x => x.id == ticket.id);
+                    foreach (Images image in images)
+                        repository.DeleteRecord<Images>(image);
+                    repository.DeleteRecord<Tickets>(ticket);
+                }
+            }
+            
+            repository.DeleteRecord<Tickets>(repository.Tickets.FirstOrDefault(x => x.id == ticketId));
+        }
+        public JsonResult DeleteTicket(int? ticketId)
+        {
+            repository.DbContext.delete_images(ticketId);
+            repository.DbContext.delete_tickets(ticketId);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
         public JsonResult DeleteImage(int? imageId)
         {
             repository.DeleteRecord<Images>(repository.Images.FirstOrDefault(x=>x.id == imageId));

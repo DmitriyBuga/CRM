@@ -16,5 +16,6 @@ namespace CRM.Models.Concrete
         public DbSet<Tickets> Tickets { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Images> Images { get; set; }
+        
     }
 }

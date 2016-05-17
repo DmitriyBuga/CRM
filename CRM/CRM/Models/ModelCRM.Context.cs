@@ -12,6 +12,8 @@ namespace CRM.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class MiniCRMEntities : DbContext
     {
@@ -25,13 +27,41 @@ namespace CRM.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Attachments> Attachments { get; set; }
         public virtual DbSet<Customers> Customers { get; set; }
+        public virtual DbSet<Images> Images { get; set; }
         public virtual DbSet<Managers> Managers { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<Tasks> Tasks { get; set; }
         public virtual DbSet<Tickets> Tickets { get; set; }
         public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<Attachments> Attachments { get; set; }
-        public virtual DbSet<Images> Images { get; set; }
+    
+        [DbFunction("MiniCRMEntities", "select_tickets")]
+        public virtual IQueryable<select_tickets_Result> select_tickets(Nullable<int> ticket_id)
+        {
+            var ticket_idParameter = ticket_id.HasValue ?
+                new ObjectParameter("ticket_id", ticket_id) :
+                new ObjectParameter("ticket_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<select_tickets_Result>("[MiniCRMEntities].[select_tickets](@ticket_id)", ticket_idParameter);
+        }
+    
+        public virtual int delete_images(Nullable<int> ticket_id)
+        {
+            var ticket_idParameter = ticket_id.HasValue ?
+                new ObjectParameter("ticket_id", ticket_id) :
+                new ObjectParameter("ticket_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("delete_images", ticket_idParameter);
+        }
+    
+        public virtual int delete_tickets(Nullable<int> ticket_id)
+        {
+            var ticket_idParameter = ticket_id.HasValue ?
+                new ObjectParameter("ticket_id", ticket_id) :
+                new ObjectParameter("ticket_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("delete_tickets", ticket_idParameter);
+        }
     }
 }

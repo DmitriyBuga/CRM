@@ -17,6 +17,15 @@
             }
         })
     }
+    this.deleteTicket = function (ticketId) {
+        var responce = $http({
+            method: "GET",
+            url: "DeleteTicket",
+            params: {
+                ticketId: ticketId
+            }
+        })
+    }
     this.loadTicketImages = function (ticketId) {
         var responce = $http({
             method: "POST",

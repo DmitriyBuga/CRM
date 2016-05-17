@@ -85,6 +85,23 @@
     <Property Name="firstname" Type="nvarchar" MaxLength="50" />
     <Property Name="lastname" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <Function Name="delete_images" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ticket_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="delete_tickets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ticket_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="select_tickets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ticket_id" Type="int" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="id" Type="int" />
+          <Property Name="parent_id" Type="int" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
   <EntityContainer Name="Хранилище MiniCRMModelContainer">
     <EntitySet Name="Attachments" EntityType="Self.Attachments" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
