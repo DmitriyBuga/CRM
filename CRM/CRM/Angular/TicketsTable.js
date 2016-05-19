@@ -73,9 +73,9 @@ app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, slide, 
         $uibModalInstance.dismiss('cancel');
     };
 });
-app.controller("crmTableController", function ($scope, $uibModal, $filter, angularService, viewModel) {
+app.controller("crmTableController", function ($scope, $uibModal, $filter, $timeout, angularService, viewModel) {
     
-    $scope.lEditNow = false;
+    $scope.lNewTicket = false;
     $scope.tasks = viewModel.tasks;
     $scope.tickets = viewModel.tickets;
     $scope.selectedTicket = {};
@@ -118,6 +118,17 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, angul
         }
         }, function (err) { alert(err); }));
     }
+    $scope.afterAddTicket = function (elem) {
+        if ($scope.lNewTicket) {
+            var active = angular.element(document.querySelector('#ticket_in_tree.active'));
+            if (active.length > 0) {
+                active.removeClass('active');
+                elem.addClass('active');
+            }
+        }
+        
+        //$timeout($scope.setFirstActiveTicketButton(0), 100000)
+    }
     $scope.setFirstActiveTicketButton = function (ticketId) {
         var active = angular.element(document.querySelector('#ticket_in_tree.active'));
         if (active.length == 0) {
@@ -125,13 +136,18 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, angul
             active.addClass('active');
         }
     }
-    $scope.selectTicketInTree = function (ticketId) {
+    $scope.setButtonSelected = function(title){
         var active = angular.element(document.querySelector('#ticket_in_tree.active'));
         if (active.length > 0)
         {
             active.removeClass('active');
-            active = angular.element(event.target);
-            active.addClass('active');
+            //
+            active = angular.element(document.querySelectorAll('#ticket_in_tree'));
+            for (var i = 0; i < active.length; i++)
+            {
+                if(active[i].title == title)
+                    active.eq(i).addClass('active');
+            }
         }
         else
         {
@@ -139,10 +155,17 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, angul
             active.addClass('active');
         }
         
+    }
+    $scope.setSelectedTicket = function (ticketId) {
         $scope.selectedTicket = {};
         $scope.selectedTicket = $scope.getTicket(ticketId, $scope.currentTicketsChain);
         $scope.selectedTicket.images = {};
-        setSelectedTicketImages(ticketId); 
+        setSelectedTicketImages(ticketId);
+    }
+    $scope.selectTicketInTree = function (ticketId) {
+        var active = angular.element(event.target);
+        $scope.setButtonSelected(active[0].title)
+        $scope.setSelectedTicket(ticketId);
     }
     $scope.getCurrentImage = function () {
         return $scope.currentImage;
@@ -157,7 +180,8 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, angul
     $scope.deleteTicket = function () {
         if (confirm("Вы действительно хотите удалить текущую заявку?"))
         {
-            angularService.deleteTicket($scope.selectedTicket.id);
+            if (!$scope.lNewTicket)
+                angularService.deleteTicket($scope.selectedTicket.id);
             function arrayCloneWODeleted(arr) {
                 var i, copy;
                 if (typeof arr === 'object' && arr != null && arr.length > 0)
@@ -170,10 +194,9 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, angul
                         arr = {};
                         return arr;
                     }
-                    if (arr[0].hasOwnProperty('currentTicketsChain') && arr[0].currentTicketsChain.length > 0 && arr[0].currentTicketsChain[0].id == $scope.selectedTicket.id)
+                    if (arr[0].hasOwnProperty('currentTicketsChain') && arr[0].currentTicketsChain.length > 0)
                     {
-                        arr[0].currentTicketsChain = [];
-                        return arr;
+                        arr[0].currentTicketsChain = _.reject(arr[0].currentTicketsChain, function(num) {return num.id == $scope.selectedTicket.id;});
                     }
                 }
                 if (Array.isArray(arr)) {
@@ -196,7 +219,9 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, angul
             $scope.currentTicketsChain = arrayCloneWODeleted($scope.currentTicketsChain);
             if ($scope.selectedTicket.parent_id >= 0)
             {
-                $scope.selectTicketInTree($scope.selectedTicket.parent_id);
+                $scope.setSelectedTicket($scope.selectedTicket.parent_id)
+                $scope.setButtonSelected($scope.selectedTicket.id)
+                //$scope.selectTicketInTree();
                     
             }
         }
@@ -206,9 +231,13 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, angul
         var temp = {
             parent_id: $scope.selectedTicket.id,
             currentTicketsChain: {},
-            subject:$scope.selectedTicket.subject
+            subject: $scope.selectedTicket.subject,
+            id: -1
         }
         $scope.selectedTicket.currentTicketsChain.push(temp);
+        $scope.selectedTicket = $scope.getTicket(-1, $scope.currentTicketsChain);
+        $scope.selectedTicket.images = {};
+        $scope.lNewTicket = true;
     }
     $scope.deleteImage = function (imageId)
     {
