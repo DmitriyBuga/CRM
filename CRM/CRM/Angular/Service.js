@@ -8,6 +8,16 @@
         });
         return responce;
     }
+    this.saveTicket = function (ticket) {
+        ticket.images = {};
+        var responce = $http({
+            method: "POST",
+            url: "SaveTicket",
+            params: { ticket: JSON.stringify(ticket) },
+            datatype: "JSON"
+        });
+        return responce
+    }
     this.deleteImage = function (imageId) {
         var responce = $http({
             method: "GET",

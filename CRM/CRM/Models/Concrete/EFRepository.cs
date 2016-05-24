@@ -88,6 +88,10 @@ namespace CRM.Models.Concrete
             }
             return dbEntry;
         }
+        public void SaveChanges<T>() where T : class
+        {
+            dbContext.SaveChanges();
+        }
         public void UpdateRecord<T>(T dbEntry) where T : class
         {
             //dbContext.Entry<T>(dbEntry).State = EntityState.Modified;

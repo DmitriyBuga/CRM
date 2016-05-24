@@ -18,5 +18,7 @@ namespace CRM.Models
         public int ticket_id { get; set; }
         public byte[] ImageData { get; set; }
         public string ImageMimeType { get; set; }
+    
+        public virtual Tickets Tickets { get; set; }
     }
 }

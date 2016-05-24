@@ -61,6 +61,14 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Statuses">
+      <EntityTypeMapping TypeName="MiniCRMModel.Statuses">
+        <MappingFragment StoreEntitySet="Statuses">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Tasks">
       <EntityTypeMapping TypeName="MiniCRMModel.Tasks">
         <MappingFragment StoreEntitySet="Tasks">
@@ -99,14 +107,6 @@
           <ScalarProperty Name="position" ColumnName="position" />
           <ScalarProperty Name="password" ColumnName="password" />
           <ScalarProperty Name="login" ColumnName="login" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Statuses">
-      <EntityTypeMapping TypeName="MiniCRMModel.Statuses">
-        <MappingFragment StoreEntitySet="Statuses">
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>

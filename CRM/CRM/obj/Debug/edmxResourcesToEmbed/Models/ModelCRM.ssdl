@@ -92,11 +92,26 @@
     <Property Name="firstname" Type="nvarchar" MaxLength="50" />
     <Property Name="lastname" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <Association Name="FK_Images_Tickets">
+    <End Role="Tickets" Type="Self.Tickets" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Images" Type="Self.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tickets">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="ticket_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Function Name="delete_images" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ticket_id" Type="int" Mode="In" />
   </Function>
   <Function Name="delete_tickets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ticket_id" Type="int" Mode="In" />
+    <Parameter Name="return_ticket" Type="int" Mode="InOut" />
   </Function>
   <Function Name="select_tickets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ticket_id" Type="int" Mode="In" />
@@ -119,5 +134,9 @@
     <EntitySet Name="Tasks" EntityType="Self.Tasks" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tickets" EntityType="Self.Tickets" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Images_Tickets" Association="Self.FK_Images_Tickets">
+      <End Role="Tickets" EntitySet="Tickets" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
   </EntityContainer>
 </Schema>

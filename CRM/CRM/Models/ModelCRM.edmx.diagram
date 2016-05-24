@@ -10,10 +10,11 @@
         <EntityTypeShape EntityType="MiniCRMModel.Images" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="MiniCRMModel.Managers" Width="1.5" PointX="2.75" PointY="3.75" />
         <EntityTypeShape EntityType="MiniCRMModel.Role" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MiniCRMModel.Tasks" Width="1.5" PointX="4.75" PointY="3.75" />
-        <EntityTypeShape EntityType="MiniCRMModel.Tickets" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="MiniCRMModel.Users" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="MiniCRMModel.Statuses" Width="1.5" PointX="3.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Statuses" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Tasks" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Tickets" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="MiniCRMModel.Users" Width="1.5" PointX="2.75" PointY="6.75" />
+        <AssociationConnector Association="MiniCRMModel.FK_Images_Tickets" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

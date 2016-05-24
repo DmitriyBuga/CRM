@@ -34,45 +34,6 @@ function initMenu() {
 jQuery(document).ready(function () {
     initMenu();
 });
-app.controller("ticketsTreeController", function ($scope, $filter, angularService, viewModel) {
-
-});
-app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, slide, slides) {
-
-    $scope.item = 0;
-    $scope.slide = slide;
-    $scope.slides = slides
-    $scope.item = _.indexOf($scope.slides, $scope.slide);
-
-    /*
-    $scope.selected = {
-        item: $scope.items[0]
-    };
-    */
-    $scope.next = function () {
-
-
-        if ($scope.item < slides.length - 1) {
-            $scope.item++;
-            $scope.slide = slides[$scope.item];
-        }
-    }
-    $scope.prev = function () {
-
-
-        if ($scope.item > 0) {
-            $scope.slide = slides[--$scope.item];
-        }
-    }
-    $scope.ok = function () {
-        $uibModalInstance.dismiss('cancel');
-        //$uibModalInstance.close($scope.selected.item);
-    };
-
-    $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
-});
 app.controller("crmTableController", function ($scope, $uibModal, $filter, $timeout, angularService, viewModel) {
     
     $scope.lNewTicket = false;
@@ -90,7 +51,15 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, $time
         }
         return returnData;
     }
-    
+    $scope.$watch('lNewTicket', function () {
+        //don't append image in new ticket before saving
+        var loadImageBtn = angular.element(document.querySelector('#authUser_loadFile'));
+        //alert(loadImageBtn.disabled);
+        if (loadImageBtn !=  undefined) {
+            loadImageBtn[0].disabled = !loadImageBtn[0].disabled
+        }
+        
+    });
     $scope.getTicket = function (ticketId, ticketsChain) {
         function searchTicket(data, ticketId) {
             var returnData;
@@ -104,6 +73,15 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, $time
             return returnData;
         }
         return searchTicket(ticketsChain, ticketId);
+    }
+    $scope.saveTicket = function (ticketId) {
+        var getData = angularService.saveTicket($scope.selectedTicket);
+        if (getData.then(function (imageData) {
+        {
+            $scope.selectedTicket.id = parseInt(imageData.data);
+            $scope.lNewTicket = false;
+        }
+        }, function (err) { alert(err); }));
     }
     setSelectedTicketImages = function(ticketId){
         var getData = angularService.loadTicketImages(ticketId);
@@ -221,20 +199,44 @@ app.controller("crmTableController", function ($scope, $uibModal, $filter, $time
             {
                 $scope.setSelectedTicket($scope.selectedTicket.parent_id)
                 $scope.setButtonSelected($scope.selectedTicket.id)
+                $scope.lNewTicket = false;
                 //$scope.selectTicketInTree();
                     
             }
         }
     }
-    $scope.answerTicket = function () {
-        
-        var temp = {
+    $scope.createNewTicketObject = function () {
+        var ticket = {
             parent_id: $scope.selectedTicket.id,
             currentTicketsChain: {},
             subject: $scope.selectedTicket.subject,
+            children: $scope.selectedTicket.children,
+            cust_id: $scope.selectedTicket.cust_id,
+            department_id: $scope.selectedTicket.department_id,
+            email: $scope.selectedTicket.email,
+            manager_id: $scope.selectedTicket.manager_id,
+            task_id: $scope.selectedTicket.task_id,
+            user_id: $scope.selectedTicket.user_id,
+            status_id: $scope.selectedTicket.status_id,
+            body: $scope.searchTicket.body,
+            reference: "",
+            responce: "",
+            mail_data:"",
             id: -1
         }
-        $scope.selectedTicket.currentTicketsChain.push(temp);
+        return ticket;
+    }
+    $scope.answerTicket = function () {
+        /*
+        var temp = {
+            parent_id: $scope.selectedTicket.id,
+            currentTicketsChain: {},
+
+            subject: $scope.selectedTicket.subject,
+            id: -1
+        }
+        */
+        $scope.selectedTicket.currentTicketsChain.push($scope.createNewTicketObject());
         $scope.selectedTicket = $scope.getTicket(-1, $scope.currentTicketsChain);
         $scope.selectedTicket.images = {};
         $scope.lNewTicket = true;

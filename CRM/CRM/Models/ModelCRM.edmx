@@ -97,11 +97,26 @@
           <Property Name="firstname" Type="nvarchar" MaxLength="50" />
           <Property Name="lastname" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <Association Name="FK_Images_Tickets">
+          <End Role="Tickets" Type="Self.Tickets" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Images" Type="Self.Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tickets">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="ticket_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="delete_images" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ticket_id" Type="int" Mode="In" />
         </Function>
         <Function Name="delete_tickets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ticket_id" Type="int" Mode="In" />
+          <Parameter Name="return_ticket" Type="int" Mode="InOut" />
         </Function>
         <Function Name="select_tickets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ticket_id" Type="int" Mode="In" />
@@ -124,6 +139,10 @@
           <EntitySet Name="Tasks" EntityType="Self.Tasks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tickets" EntityType="Self.Tickets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Images_Tickets" Association="Self.FK_Images_Tickets">
+            <End Role="Tickets" EntitySet="Tickets" />
+            <End Role="Images" EntitySet="Images" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -138,17 +157,22 @@
           </FunctionImport>
           <FunctionImport Name="delete_tickets">
           <Parameter Name="ticket_id" Mode="In" Type="Int32" />
+            <Parameter Name="return_ticket" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="Attachments" EntityType="MiniCRMModel.Attachments" />
           <EntitySet Name="Customers" EntityType="MiniCRMModel.Customers" />
           <EntitySet Name="Images" EntityType="MiniCRMModel.Images" />
           <EntitySet Name="Managers" EntityType="MiniCRMModel.Managers" />
           <EntitySet Name="Role" EntityType="MiniCRMModel.Role" />
+          <EntitySet Name="Statuses" EntityType="MiniCRMModel.Statuses" />
           <EntitySet Name="Tasks" EntityType="MiniCRMModel.Tasks" />
           <EntitySet Name="Tickets" EntityType="MiniCRMModel.Tickets" />
           <EntitySet Name="Users" EntityType="MiniCRMModel.Users" />
-          <EntitySet Name="Statuses" EntityType="MiniCRMModel.Statuses" />
-        </EntityContainer>
+          <AssociationSet Name="FK_Images_Tickets" Association="MiniCRMModel.FK_Images_Tickets">
+            <End Role="Tickets" EntitySet="Tickets" />
+            <End Role="Images" EntitySet="Images" />
+          </AssociationSet>
+          </EntityContainer>
         <ComplexType Name="select_tickets_Result">
           <Property Type="Int32" Name="id" Nullable="true" />
           <Property Type="Int32" Name="parent_id" Nullable="true" />
@@ -180,6 +204,7 @@
           <Property Name="ticket_id" Type="Int32" Nullable="false" />
           <Property Name="ImageData" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="ImageMimeType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Tickets" Relationship="MiniCRMModel.FK_Images_Tickets" FromRole="Images" ToRole="Tickets" />
         </EntityType>
         <EntityType Name="Managers">
           <Key>
@@ -196,6 +221,13 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Statuses">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Tasks">
@@ -223,6 +255,7 @@
           <Property Name="task_id" Type="Int32" Nullable="false" />
           <Property Name="manager_id" Type="Int32" Nullable="false" />
           <Property Name="cust_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Images" Relationship="MiniCRMModel.FK_Images_Tickets" FromRole="Tickets" ToRole="Images" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -238,13 +271,18 @@
           <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Statuses">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
+        <Association Name="FK_Images_Tickets">
+          <End Type="MiniCRMModel.Tickets" Role="Tickets" Multiplicity="1" />
+          <End Type="MiniCRMModel.Images" Role="Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tickets">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="ticket_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -311,6 +349,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Statuses">
+            <EntityTypeMapping TypeName="MiniCRMModel.Statuses">
+              <MappingFragment StoreEntitySet="Statuses">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="MiniCRMModel.Tasks">
               <MappingFragment StoreEntitySet="Tasks">
@@ -354,15 +400,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Statuses">
-            <EntityTypeMapping TypeName="MiniCRMModel.Statuses">
-              <MappingFragment StoreEntitySet="Statuses">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

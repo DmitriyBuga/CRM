@@ -14,6 +14,12 @@ namespace CRM.Models
     
     public partial class Tickets
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Tickets()
+        {
+            this.Images = new HashSet<Images>();
+        }
+    
         public int id { get; set; }
         public int department_id { get; set; }
         public int user_id { get; set; }
@@ -28,5 +34,8 @@ namespace CRM.Models
         public int task_id { get; set; }
         public int manager_id { get; set; }
         public int cust_id { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Images> Images { get; set; }
     }
 }

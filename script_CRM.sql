@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [MiniCRM]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  Database [MiniCRM]    Script Date: 24.05.2016 14:39:46 ******/
 CREATE DATABASE [MiniCRM]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -75,7 +75,7 @@ ALTER DATABASE [MiniCRM] SET TARGET_RECOVERY_TIME = 0 SECONDS
 GO
 USE [MiniCRM]
 GO
-/****** Object:  StoredProcedure [dbo].[delete_images]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  StoredProcedure [dbo].[delete_images]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -83,31 +83,45 @@ GO
 CREATE procedure [dbo].[delete_images]
 @ticket_id int
 as
-BEGIN TRANSACTION 
+
+	
 	delete images from images i1
 	inner join (select * from select_tickets(
 	@ticket_id)) t1 on i1.ticket_id = t1.id
-commit transaction
+
+	
+
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[delete_tickets]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  StoredProcedure [dbo].[delete_tickets]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE procedure [dbo].[delete_tickets]
 
-@ticket_id int
+@ticket_id int,
+@return_ticket int OUTPUT
 as
 
-BEGIN TRANSACTION 
-	delete tickets from tickets t1
-	where t1.id in (select id from dbo.select_tickets(@ticket_id))
-commit tran
+	with cte
+	as
+	(
+	select id, parent_id from tickets
+	where id = @ticket_id
+	union all
+	select t1.id, t1.parent_id from tickets t1
+	inner join cte t2 on 
+	t1.parent_id = t2.id
+	)
 
+	delete tickets from tickets t1
+	where t1.id in (select id from cte)
+
+return
 GO
-/****** Object:  Table [dbo].[Attachments]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  Table [dbo].[Attachments]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -125,7 +139,7 @@ CREATE TABLE [dbo].[Attachments](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Customers]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  Table [dbo].[Customers]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -142,7 +156,7 @@ CREATE TABLE [dbo].[Customers](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Images]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  Table [dbo].[Images]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -163,7 +177,7 @@ CREATE TABLE [dbo].[Images](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Managers]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  Table [dbo].[Managers]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -181,7 +195,7 @@ CREATE TABLE [dbo].[Managers](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Role]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  Table [dbo].[Role]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -196,7 +210,22 @@ CREATE TABLE [dbo].[Role](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Tasks]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  Table [dbo].[Statuses]    Script Date: 24.05.2016 14:39:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Statuses](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_Statuses] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Tasks]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -211,7 +240,7 @@ CREATE TABLE [dbo].[Tasks](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Tickets]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  Table [dbo].[Tickets]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -238,7 +267,7 @@ CREATE TABLE [dbo].[Tickets](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -260,7 +289,7 @@ CREATE TABLE [dbo].[Users](
 ) ON [PRIMARY]
 
 GO
-/****** Object:  UserDefinedFunction [dbo].[select_tickets]    Script Date: 13.05.2016 16:13:08 ******/
+/****** Object:  UserDefinedFunction [dbo].[select_tickets]    Script Date: 24.05.2016 14:39:46 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -268,6 +297,7 @@ GO
 CREATE function [dbo].[select_tickets](@ticket_id integer)
 returns table
 AS
+
 return
 (
 	with cte
@@ -282,6 +312,7 @@ return
 	)
 	select * from cte
 )
+
 GO
 INSERT [dbo].[Role] ([id], [name]) VALUES (0, N'Admin')
 INSERT [dbo].[Role] ([id], [name]) VALUES (1, N'User')
@@ -296,8 +327,6 @@ SET IDENTITY_INSERT [dbo].[Tickets] ON
 
 INSERT [dbo].[Tickets] ([id], [department_id], [user_id], [status_id], [email], [subject], [body], [mail_data], [reference], [responce], [parent_id], [task_id], [manager_id], [cust_id]) VALUES (3, 1, 1, 2, N'aaa@mail.com', N'asdasasdasdasd', N'sdfasdkljfsdlj asfdkasdlasdfjl asdflasdffkajasdflj', NULL, NULL, NULL, NULL, 1, 1, 1)
 INSERT [dbo].[Tickets] ([id], [department_id], [user_id], [status_id], [email], [subject], [body], [mail_data], [reference], [responce], [parent_id], [task_id], [manager_id], [cust_id]) VALUES (5, 1, 1, 2, N'aaabbb@mail.com', N'sdffwexxbcxc', N'ew23qrerqw vxczxcvv asdfasdffads', NULL, NULL, NULL, 3, 1, 1, 1)
-INSERT [dbo].[Tickets] ([id], [department_id], [user_id], [status_id], [email], [subject], [body], [mail_data], [reference], [responce], [parent_id], [task_id], [manager_id], [cust_id]) VALUES (6, 1, 1, 2, N'aaa@mail.com', N'sdffsxcvxcvxcvxvc', N'sdfdsdfdfsdf', NULL, NULL, NULL, 5, 1, 1, 1)
-INSERT [dbo].[Tickets] ([id], [department_id], [user_id], [status_id], [email], [subject], [body], [mail_data], [reference], [responce], [parent_id], [task_id], [manager_id], [cust_id]) VALUES (7, 1, 1, 2, N'aaa@mail.com', N'sdffsxcvxcvxcvxvc', N'sdfdsdfdfsdf', NULL, NULL, NULL, 5, 1, 1, 1)
 SET IDENTITY_INSERT [dbo].[Tickets] OFF
 SET IDENTITY_INSERT [dbo].[Users] ON 
 
@@ -307,6 +336,13 @@ INSERT [dbo].[Users] ([id], [name], [login], [password], [position], [department
 INSERT [dbo].[Users] ([id], [name], [login], [password], [position], [department_id], [role_id], [firstname], [lastname]) VALUES (3, N'bbb', N'bbb', N'123qwe', N'', NULL, 2, NULL, NULL)
 INSERT [dbo].[Users] ([id], [name], [login], [password], [position], [department_id], [role_id], [firstname], [lastname]) VALUES (4, N'user', N'user', N'123qwe', N'', NULL, 2, NULL, NULL)
 SET IDENTITY_INSERT [dbo].[Users] OFF
+ALTER TABLE [dbo].[Images]  WITH CHECK ADD  CONSTRAINT [FK_Images_Tickets] FOREIGN KEY([ticket_id])
+REFERENCES [dbo].[Tickets] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Images] CHECK CONSTRAINT [FK_Images_Tickets]
+GO
 USE [master]
 GO
 ALTER DATABASE [MiniCRM] SET  READ_WRITE 

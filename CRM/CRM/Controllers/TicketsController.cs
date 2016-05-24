@@ -3,10 +3,12 @@ using CRM.Models.Abstract;
 using CRM.Models.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace CRM.Controllers
 {
@@ -104,10 +106,71 @@ namespace CRM.Controllers
             
             repository.DeleteRecord<Tickets>(repository.Tickets.FirstOrDefault(x => x.id == ticketId));
         }
+        public JsonResult SaveTicket(string ticket)
+        {
+            JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+            ViewTickets temp = jsonSerializer.Deserialize<ViewTickets>(ticket);
+            Tickets t;
+            if (temp.id == -1)
+            {
+                t = new Tickets
+                {
+                    id = temp.id,
+                    department_id = temp.department_id,
+                    user_id = temp.user_id,
+                    status_id = temp.status_id,
+                    email = temp.email,
+                    subject = temp.subject,
+                    body = temp.body,
+                    mail_data = temp.mail_data,
+                    reference = temp.reference,
+                    responce = temp.responce,
+                    parent_id = temp.parent_id,
+                    task_id = temp.task_id,
+                    manager_id = temp.manager_id,
+                    cust_id = temp.manager_id
+                };
+            }
+            else
+            {
+                t = repository.Tickets.FirstOrDefault(x => x.id == temp.id);
+                t.id = temp.id;
+                t.department_id = temp.department_id;
+                t.user_id = temp.user_id;
+                t.status_id = temp.status_id;
+                t.email = temp.email;
+                t.subject = temp.subject;
+                t.body = temp.body;
+                t.mail_data = temp.mail_data;
+                t.reference = temp.reference;
+                t.responce = temp.responce;
+                t.parent_id = temp.parent_id;
+                t.task_id = temp.task_id;
+                t.manager_id = temp.manager_id;
+                t.cust_id = temp.manager_id;
+            }
+            
+            if (t.id == -1)
+                t = repository.CreateRecord<Tickets>(t);
+            else
+                repository.UpdateRecord<Tickets>(t);
+            return Json(t.id.ToString(), JsonRequestBehavior.AllowGet);
+        }
         public JsonResult DeleteTicket(int? ticketId)
         {
-            repository.DbContext.delete_images(ticketId);
-            repository.DbContext.delete_tickets(ticketId);
+            try
+            {
+                //repository.DbContext.delete_images(ticketId);
+                //repository.SaveChanges<Images>();
+                ObjectParameter id = new ObjectParameter("return_ticket", typeof(int));
+                repository.DbContext.delete_tickets(ticketId, id);
+                //repository.SaveChanges<Tickets>();
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Data.ToString(), JsonRequestBehavior.AllowGet);
+            }
+            
             return Json("", JsonRequestBehavior.AllowGet);
         }
         public JsonResult DeleteImage(int? imageId)
@@ -118,17 +181,26 @@ namespace CRM.Controllers
         public JsonResult LoadImage(int ticketId)
         {
             IQueryable<Images> images = repository.Images.Where(x => x.ticket_id == ticketId);
-            string[,] retImages = new string[images.Count(),2];
-            int iCount = 0;
-            foreach (var image in images)
+            string[,] retImages;
+            if (images.Count() > 0)
             {
-                string str = System.Convert.ToBase64String(image.ImageData, 0, image.ImageData.Length);
-                retImages[iCount,0] = str;
-                retImages[iCount,1] = image.id.ToString();
-                iCount++;
+                retImages = new string[images.Count(), 2];
+                int iCount = 0;
+                foreach (var image in images)
+                {
+                    string str = System.Convert.ToBase64String(image.ImageData, 0, image.ImageData.Length);
+                    retImages[iCount, 0] = str;
+                    retImages[iCount, 1] = image.id.ToString();
+                    iCount++;
 
+                }
+                return Json(retImages, JsonRequestBehavior.AllowGet);
             }
-            return Json(retImages, JsonRequestBehavior.AllowGet);
+            else
+            {
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+            
         }
         public JsonResult GetTicketsChain(int ticketId)
         {
